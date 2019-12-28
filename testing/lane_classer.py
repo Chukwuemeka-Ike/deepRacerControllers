@@ -12,7 +12,7 @@ import numpy as np
 # DeepRacer
 class laneFinder:
     def __init__(self):
-        self.image = cv2.imread('lane1.jpg')
+        self.image = cv2.imread('lane9Curve.jpg')
         self.edges = []
 
     # Find the edges of the regions that correspond to the lane color
