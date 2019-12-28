@@ -12,8 +12,12 @@ import numpy as np
 # DeepRacer
 class laneFinder:
     def __init__(self):
-        self.image = cv2.imread('lane9Curve.jpg')
+        self.image = cv2.imread('laneLeft4Curve.jpg')
         self.edges = []
+        # image = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
+        # self.bridge = cv_bridge.CvBridge()
+        # self.image_sub = rospy.Subscriber('cv_camera/image_rect_color', Image, self.image_callback)
+
 
     # Find the edges of the regions that correspond to the lane color
     def findEdges(self):
@@ -44,9 +48,9 @@ class laneFinder:
     # This function uses the Hough Line Transform in detecting line segments
     # from the computed edges from the above function.
     def detectLineSegments(self):
-        rho = 0.5 # distance precision in pixels
+        rho = 0.2 # distance precision in pixels
         angle = np.pi/180 # angular precision in radians (1 degree)
-        minThreshold = 10 # minimum length to be detected as a line
+        minThreshold = 20 # minimum length to be detected as a line
         self.lineSegments = cv2.HoughLinesP(self.croppedEdges, rho, angle, minThreshold,
                                 np.array([]), minLineLength=15, maxLineGap=6)
         return self.lineSegments
@@ -56,7 +60,7 @@ class laneFinder:
         height, width, _ = self.image.shape
         slope, intercept = line
         y1 = height  # bottom of the frame
-        y2 = int(y1 * 1 / 2)  # make points from middle of the frame down
+        y2 = int(y1 / 2)  # make points from middle of the frame down
 
         # bound the coordinates within the frame
         x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
@@ -78,7 +82,7 @@ class laneFinder:
         leftFit = []
         rightFit = []
 
-        boundary = 1/3
+        boundary = 2/5
         leftRegionBoundary = width*(1-boundary) # left lane line segment
                             # should be on left 2/3 of the screen
         rightRegionBoundary = width * boundary # right lane line segment
@@ -105,13 +109,13 @@ class laneFinder:
         rightFitAvg = np.average(rightFit, axis=0)
         if len(rightFit) > 0:
             laneLines.append(self.make_points(rightFitAvg))
-        rospy.loginfo("Lane lines: %s" % laneLines) # [[[316, 720, 484, 432]], [[1009, 720, 718, 432]]]
+        rospy.loginfo("Lane lines: %s" % laneLines)
         return laneLines
 
 def detectLane(finder):
-    edges = finder.findEdges()
-    croppedEdges = finder.immediateInterest()
-    lineSegments = finder.detectLineSegments()
+    finder.findEdges()
+    finder.immediateInterest()
+    finder.detectLineSegments()
     laneLines = finder.avgSlopeIntercept()
     return laneLines
 

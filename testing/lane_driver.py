@@ -5,57 +5,55 @@
 import lane_classer as lc
 import cv2, numpy as np
 
-# This function takes in a lane finder object, and
-def displayHeadingLine(finder, left_x2, right_x2, lineColor=(0, 0, 255), lineWidth=6):
-    headingImg = np.zeros_like(finder.image)
-    height, width, _ = finder.image.shape
 
-    # Get the heading line from the steering angle
-    # (x1, y1) always at bottom center of the screen
-    # (x2, y2) is based on the angle and (x1, y1)
+# Simple function to compute the angle between the heading line and center line
+def angleBtwPoints(x1, y1, x, y2):
+    centerLine = -(y1-y2)
+    # headingLine = np.sqrt(((x1-x)**2)+((y1-y2)**2))
+    headingLine = (x1-x)
+    # print(headingLine)
+    # print(centerLine)
+    angle = np.arctan2(headingLine,centerLine)
+    # angle = np.arccos(((centerLine**2)+(headingLine**2)-(headingToCenter**2))/(2*centerLine*headingLine))
+    return angle
 
+# This function computes the steering angle
+def computeSteeringAngle(laneLines):
     # Steering angle of:
     # 0 to 30 (0 to 0.9): turn left
     # 0 (0): straight
     # -30 to 0 (-0.9 to 0): turn right
-    # steeringAngleRadian = (steeringAngle)* np.pi/180
 
-    x1 = int(width/2)
-    y1 = height
-    x2 = (left_x2+right_x2)/2
-    # x2 = int(x1 - height/ 2 /np.tan(steeringAngleRadian))
-    y2 = int(height/2)
-    print(x2)
-    cv2.line(headingImg, (x1,y1), (x2,y2), lineColor, lineWidth)
+    headingImg = np.zeros_like(lc.finder.image)
+    height, width, _ = lc.finder.image.shape
+    xMid = int(width/2)
+    yEnd = height
+    yMid = int(height/2)
+
+    # Only one detected line
+    if len(laneLines) == 1:
+        x1, y1, x2, y2 = laneLines[0][0]
+        fit = np.polyfit((x1, x2), (y1, y2), 1)
+        slope = fit[0]
+        x2 = int((-yMid/slope)+xMid)
+
+    # Two detected lines
+    elif len(laneLines) == 2:
+        _, _, left_x2, _ = laneLines[0][0]
+        _, _, right_x2, _ = laneLines[1][0]
+        x2 = (left_x2+right_x2)/2
+
+    cv2.line(headingImg, (xMid,yEnd), (x2,yMid), (0,0,255), 10)
     headingImg = cv2.addWeighted(lc.lineImage, 0.8, headingImg, 1, 1)
+    angle = angleBtwPoints(xMid, yMid, x2, yEnd)*1.56
+    cv2.imshow("Heading Image", headingImg)
+    cv2.waitKey(1000)
+    if angle > 0.9:
+        angle = 0.9
+    elif angle < -0.9:
+        angle = -0.9
 
-    return headingImg
+    return angle
 
 
-# Two detected lines
-height, width, _ = lc.finder.image.shape
-_, _, left_x2, _ = lc.laneLines[0][0]
-_, _, right_x2, _ = lc.laneLines[1][0]
-
-
-# Only one detected line
-# x1, _, x2, _ = lc.laneLines[0][0]
-# xOffset = x2 - x1
-# yOffset = int(height/2)
-
-# Calculate the steering angle
-# angleToMidRad = np.arctan2(yOffset, xOffset) # angle # angle in radian to
-#                                         # center vertical line
-# angleToMidDeg = int(angleToMidRad*180/np.pi)
-# steeringAngle = angleToMidDeg + 90
-
-# if twoDetectedLines:
-    headingImg = displayHeadingLine(lc.finder, left_x2, right_x2)
-# else:
-#    headingImg =
-cv2.imshow("Heading Image", headingImg)
-cv2.waitKey(600)
-print(lc.laneLines)
-print(yOffset)
-print(xOffset)
-print(steeringAngle)
+angle = computeSteeringAngle(lc.laneLines)
