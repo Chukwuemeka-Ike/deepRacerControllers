@@ -34,9 +34,9 @@ class laneFollower:
             print(angle)
             cv2.imshow("Lanes", headingImg)
             cv2.waitKey(500)
-            steerDeepRacer(angle)
+            self.steerDeepRacer(angle)
         else:
-            stopDriving()
+            self.stopDriving()
 
     def steerDeepRacer(self, angle):
         self.servoCtrlMsg.throttle = 0.6
