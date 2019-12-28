@@ -13,24 +13,24 @@ import rospy
 from sensor_msgs.msg import Image
 from _ServoCtrlMsg import ServoCtrlMsg # ctrl_pkg.msg
 import numpy as np
-import lane_finder as lf
 
 # Create a laneDriver class to encapsulate the driving commands
 class laneDriver:
     def __init__(self):
-        self.driveCommand = rospy.Publisher('manual_drive', ServoCtrlMsg,
-                                                        queue_size=10)
         self.servoCtrlMsg = ServoCtrlMsg()
 
-    def forwardThrottle(self):
-        self.servoCtrlMsg.throttle = 0.1
-        self.driveCommand.publish(self.servoCtrlMsg)
+    def driveForward(self):
+        self.servoCtrlMsg.throttle = 0.
+
+        return self.servoCtrlMsg
 
     def steerDeepRacer(self, angle):
         self.servoCtrlMsg.angle = angle
-        self.driveCommand.publish(self.servoCtrlMsg)
+
+        return self.servoCtrlMsg
 
     def stopDriving(self):
         self.servoCtrlMsg.throttle = 0.0
         self.servoCtrlMsg.angle = 0.0
-        self.driveCommand.publish(self.servoCtrlMsg)
+
+        return self.servoCtrlMsg

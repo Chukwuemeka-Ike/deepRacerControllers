@@ -12,7 +12,7 @@ import numpy as np
 # DeepRacer
 class laneFinder:
     def __init__(self):
-        self.image = cv2.imread('laneLeft4Curve.jpg')
+        self.image = cv2.imread('lane4.jpg')
         self.edges = []
         # image = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
         # self.bridge = cv_bridge.CvBridge()
