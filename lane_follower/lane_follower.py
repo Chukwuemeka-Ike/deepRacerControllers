@@ -32,8 +32,8 @@ class laneFollower:
             lineImage = lFinder.displayLines(finder, laneLines)
             angle, headingImg = lFinder.computeSteeringAngle(finder, laneLines, lineImage)
             print(angle)
-            cv2.imshow("Lanes", headingImg)
-            cv2.waitKey(500)
+            # cv2.imshow("Lanes", headingImg)
+            # cv2.waitKey(500)
             self.steerDeepRacer(angle)
         else:
             self.stopDriving()
