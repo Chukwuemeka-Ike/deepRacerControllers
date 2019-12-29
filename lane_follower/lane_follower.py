@@ -28,7 +28,7 @@ class laneFollower:
         self.image = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
         finder = lFinder.laneFinder(self.image)
         laneLines = lFinder.detectLane(finder)
-        if laneLines is not None:
+        if len(laneLines) != 0 :
             lineImage = lFinder.displayLines(finder, laneLines)
             angle, headingImg = lFinder.computeSteeringAngle(finder, laneLines, lineImage)
             print(angle)
