@@ -28,12 +28,11 @@ class laneFollower:
         self.image = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
         finder = lFinder.laneFinder(self.image)
         laneLines = lFinder.detectLane(finder)
-        print(laneLines)
+        cv2.waitKey(1000)
         if len(laneLines) != 0 :
             lineImage = lFinder.displayLines(finder, laneLines)
             angle, headingImg = lFinder.computeSteeringAngle(finder, laneLines, lineImage)
             cv2.imshow("Lanes", headingImg)
-            cv2.waitKey(500)
             self.steerDeepRacer(angle)
         else:
             self.stopDriving()
