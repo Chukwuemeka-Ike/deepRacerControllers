@@ -102,7 +102,7 @@ class laneFinder:
         for lineSegment in self.lineSegments:
             for x1, y1, x2, y2 in lineSegment:
                 if x1 == x2:
-                    rospy.loginfo('No line segments detected')
+                    rospy.loginfo('No line segment detected')
                     continue
                 fit = np.polyfit((x1, x2), (y1, y2), 1)
                 slope = fit[0]
