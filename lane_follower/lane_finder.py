@@ -34,7 +34,7 @@ class laneFinder:
     def findEdges(self):
         hsv = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)
         lowerYellow = np.array([100, 15, 100])
-        upperYellow = np.array([120, 255, 255])
+        upperYellow = np.array([140, 255, 255])
         mask = cv2.inRange(hsv, lowerYellow, upperYellow)
         self.edges = cv2.Canny(mask, 200, 400)
         return self.edges
