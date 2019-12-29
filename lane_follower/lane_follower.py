@@ -20,7 +20,7 @@ class laneFollower:
         self.image_sub = rospy.Subscriber('cv_camera/image_rect_color',
                                                 Image, self.image_callback)
         self.driveCommand = rospy.Publisher('manual_drive', ServoCtrlMsg,
-                                                        queue_size=10)
+                                                        queue_size=30)
         self.servoCtrlMsg = ServoCtrlMsg()
         #
     #
