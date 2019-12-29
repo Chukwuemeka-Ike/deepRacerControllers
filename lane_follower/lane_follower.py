@@ -29,7 +29,7 @@ class laneFollower:
         finder = lFinder.laneFinder(self.image)
         laneLines = lFinder.detectLane(finder)
         print(laneLines)
-        if len(laneLines) != 0 :
+        if (laneLines) is not None :
             lineImage = lFinder.displayLines(finder, laneLines)
             angle, headingImg = lFinder.computeSteeringAngle(finder, laneLines, lineImage)
             cv2.imshow("Lanes", headingImg)
