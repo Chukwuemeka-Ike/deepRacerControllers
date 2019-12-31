@@ -26,21 +26,21 @@ float computeDistance(float xFirst, float yFirst, float zFirst, float xSecond, f
 
 //************************************************************
 // Callback function to register with tf2_ros::MessageFilter to be called when frame 3 is available
-void frame3_Callback(const geometry_msgs::TransformStampedConstPtr& framePtr)
-{
-  int f;
-  geometry_msgs::TransformStamped transform3;
-  tf2_ros::Buffer tfBuffer3;
-  tf2_ros::TransformListener tfListener3(tfBuffer3);
-
-  try{
-    transform3 = tfBuffer3.lookupTransform("tag_3", "cv_camera", ros::Time(0));
-  }
-  catch(tf2::TransformException &ex){
-    ROS_WARN("%s", ex.what());
-    ros::Duration(1.0).sleep();
-  }
-}
+// void frame3_Callback(const geometry_msgs::TransformStampedConstPtr& framePtr)
+// {
+//   int f;
+//   geometry_msgs::TransformStamped transform3;
+//   tf2_ros::Buffer tfBuffer3;
+//   tf2_ros::TransformListener tfListener3(tfBuffer3);
+//
+//   try{
+//     transform3 = tfBuffer3.lookupTransform("tag_3", "cv_camera", ros::Time(0));
+//   }
+//   catch(tf2::TransformException &ex){
+//     ROS_WARN("%s", ex.what());
+//     ros::Duration(1.0).sleep();
+//   }
+// }
 
 //************************************************************
 // Main function
@@ -60,11 +60,11 @@ int main(int argc, char **argv){
 
 	// Create buffer objects and transformListener objects to deal with
 	// getting the transforms
-	tf2_ros::Buffer tfBuffer1;
-	tf2_ros::Buffer tfBuffer2;
+	// tf2_ros::Buffer tfBuffer1;
+	// tf2_ros::Buffer tfBuffer2;
   tf2_ros::Buffer tfBuffer3;
-	tf2_ros::TransformListener tfListener1(tfBuffer1);
-	tf2_ros::TransformListener tfListener2(tfBuffer2);
+	// tf2_ros::TransformListener tfListener1(tfBuffer1);
+	// tf2_ros::TransformListener tfListener2(tfBuffer2);
   tf2_ros::TransformListener tfListener3(tfBuffer3);
 
 	// Set the sleep rate to 2s
@@ -74,8 +74,8 @@ int main(int argc, char **argv){
 	// Perform the following as long as the node is running
 	while(ros::ok()){
 		// Objects to hold the Transforms
-		geometry_msgs::TransformStamped transformStamped1;
-		geometry_msgs::TransformStamped transformStamped2;
+		// geometry_msgs::TransformStamped transformStamped1;
+		// geometry_msgs::TransformStamped transformStamped2;
 		geometry_msgs::TransformStamped transformStamped3;
 
 		// Try to get each transform, and warn if doesn't work each time
@@ -132,82 +132,51 @@ int main(int argc, char **argv){
 			// pub.publish(control);
 			ros::Duration(2.0).sleep();
 
-			// Find out if tag 3 ready
 			if(tag3Ready){
-				// Test if tag 3 is within an acceptable range indicating we can park
-				if((x3trans<46 && x3trans>33) && (z3trans<70 && z3trans>56) && (prevSecs3 != tfSecs3)){
-					ROS_INFO_STREAM("Starting to park");
-
-					control.angle = (float) (-0.9);
-					control.throttle = (float) (-0.65);
-					pub.publish(control);
-					ROS_INFO_STREAM("Right turn");
-					ros::Duration(0.95).sleep();
-
-					control.angle = (float) (0.9);
-					control.throttle = (float) (-0.65);
-					pub.publish(control);
-					ROS_INFO_STREAM("Left turn");
-					ros::Duration(0.5).sleep();
-
-					control.angle = (float) (-0.9);
-					control.throttle = (float) (0.65);
-					pub.publish(control);
-					ROS_INFO_STREAM("Correct");
-					ros::Duration(0.45).sleep();
-
-					control.angle = (float) (0);
-					control.throttle = (float) (0);
-					ROS_INFO_STREAM("Rest");
-					pub.publish(control);
-
-					prevSecs3 = tfSecs3;
-				}
-				else{
-					control.angle = (float) (0);
-					control.throttle = (float) (0);
-					ROS_INFO_STREAM("Rest");
-					pub.publish(control);
-
-					prevSecs3 = tfSecs3;
-				}
+				ROS_INFO_STREAM(x3trans);
+				ROS_INFO_STREAM(y3trans);
+				ROS_INFO_STREAM(z3trans);
 			}
+			// // Find out if tag 3 ready
+			// if(tag3Ready){
+			// 	// Test if tag 3 is within an acceptable range indicating we can park
+			// 	if((x3trans<46 && x3trans>33) && (z3trans<70 && z3trans>56) && (prevSecs3 != tfSecs3)){
+			// 		ROS_INFO_STREAM("Starting to park");
+			//
+			// 		control.angle = (float) (-0.9);
+			// 		control.throttle = (float) (-0.65);
+			// 		pub.publish(control);
+			// 		ROS_INFO_STREAM("Right turn");
+			// 		ros::Duration(0.95).sleep();
+			//
+			// 		control.angle = (float) (0.9);
+			// 		control.throttle = (float) (-0.65);
+			// 		pub.publish(control);
+			// 		ROS_INFO_STREAM("Left turn");
+			// 		ros::Duration(0.5).sleep();
+			//
+			// 		control.angle = (float) (-0.9);
+			// 		control.throttle = (float) (0.65);
+			// 		pub.publish(control);
+			// 		ROS_INFO_STREAM("Correct");
+			// 		ros::Duration(0.45).sleep();
+			//
+			// 		control.angle = (float) (0);
+			// 		control.throttle = (float) (0);
+			// 		ROS_INFO_STREAM("Rest");
+			// 		pub.publish(control);
+			//
+			// 		prevSecs3 = tfSecs3;
+			// 	}
+			// 	else{
+			// 		control.angle = (float) (0);
+			// 		control.throttle = (float) (0);
+			// 		ROS_INFO_STREAM("Rest");
+			// 		pub.publish(control);
+			//
+			// 		prevSecs3 = tfSecs3;
+			// 	}
+			// }
 
  		} // end while
 }
-/*
-  Algorithm to Park the car from beside tag 1 ((Taken from Ballinas et al.))
-    Givens: Steering angle:0.9 = 30 deg = pi/6,
-            wheelbase, L: 0.162m,
-            robot width, W: 0.193m,
-            rear axle to rear bumper, p: 0.035m,
-            initial points, (Xs, Ys), and
-            minimum distances (xmin,ymin)
-    Output: Whole path P
-    void pathPlanner(float angle, float L, float W, float p, float Xs, float Ys
-                    float xmin, float ymin)
-    {
-    // Calculate distance R
-    float R = L/(tan(angle));
-
-    // Find intersection point Yt
-    float Yt = R-(ymin+(W/2));
-
-    // Calculate aperture angle alpha
-    float alpha = angle; // Will test this, but I believe the turn angle is equal
-
-    // Calculate intersection point Xt
-    float Xt = R*cos(alpha);
-
-    // Calculate the minimum parking spot distance
-    Mmin = (2*Xt)+p-xmin;
-
-    // Calculate the goal position
-    float Xg = (Mmin/2) + xmin + (L/2) + p;
-    float Yg = R-(W+ymin);
-    float Yf = Yg;
-    float Xf = Mmin-p;
-    float P = (Xs,Ys)(Xt,Yt)+(Xt,Yt)(Xf,Yf)+(Xf,Yf)(Xg,Yg)
-
-  }
-*/
