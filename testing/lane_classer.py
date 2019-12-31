@@ -3,8 +3,8 @@
 # Code to test the algos from DeepPiCar on a static image before
 # converting to a ROS node and deploying on the DeepRacer
 
-import cv2, cv_bridge
-import rospy
+import cv2 #, cv_bridge
+#import rospy
 import numpy as np
 
 # The laneFinder class finds the lane lines from a given image, then computes
@@ -12,7 +12,7 @@ import numpy as np
 # DeepRacer
 class laneFinder:
     def __init__(self):
-        self.image = cv2.imread('lane4.jpg')
+        self.image = cv2.imread('laneLeft4Curve.jpg')
         self.edges = []
         # image = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
         # self.bridge = cv_bridge.CvBridge()
@@ -22,10 +22,11 @@ class laneFinder:
     # Find the edges of the regions that correspond to the lane color
     def findEdges(self):
         hsv = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)
-        lowerYellow = np.array([100, 15, 100])
-        upperYellow = np.array([120, 255, 255])
+        lowerYellow = np.array([100, 15, 200])
+        upperYellow = np.array([150, 255, 255])
         mask = cv2.inRange(hsv, lowerYellow, upperYellow)
         self.edges = cv2.Canny(mask, 200, 400)
+        cv2.imshow('edges' , self.edges)
         return self.edges
 
     # This function helps the DeepRacer focus on the lower half of the image,
@@ -36,8 +37,8 @@ class laneFinder:
 
         # focus on the lower half
         polygon = np.array([[
-            (0, height*1/2),
-            (width, height*1/2),
+            (0, height*2/5),
+            (width, height*2/5),
             (width, height),
             (0, height),
         ]], np.int32)
@@ -75,7 +76,7 @@ class laneFinder:
         """
         laneLines = []
         if self.lineSegments is None:
-            rospy.loginfo("No line segments detected")
+            #rospy.loginfo("No line segments detected")
             return laneLines
 
         height, width, _ = self.image.shape
@@ -91,7 +92,7 @@ class laneFinder:
         for lineSegment in self.lineSegments:
             for x1, y1, x2, y2 in lineSegment:
                 if x1 == x2:
-                    rospy.loginfo('No line segments detected')
+                    #rospy.loginfo('No line segments detected')
                     continue
                 fit = np.polyfit((x1, x2), (y1, y2), 1)
                 slope = fit[0]
@@ -109,7 +110,7 @@ class laneFinder:
         rightFitAvg = np.average(rightFit, axis=0)
         if len(rightFit) > 0:
             laneLines.append(self.make_points(rightFitAvg))
-        rospy.loginfo("Lane lines: %s" % laneLines)
+        #rospy.loginfo("Lane lines: %s" % laneLines)
         return laneLines
 
 def detectLane(finder):

@@ -46,7 +46,7 @@ def computeSteeringAngle(laneLines):
     cv2.line(headingImg, (xMid,yEnd), (x2,yMid), (0,0,255), 10)
     headingImg = cv2.addWeighted(lc.lineImage, 0.8, headingImg, 1, 1)
     angle = angleBtwPoints(xMid, yMid, x2, yEnd)*1.56
-    cv2.imshow("Heading Image", headingImg)
+    # cv2.imshow("Heading Image", headingImg)
     cv2.waitKey(1000)
     if angle > 0.9:
         angle = 0.9
@@ -57,3 +57,4 @@ def computeSteeringAngle(laneLines):
 
 
 angle = computeSteeringAngle(lc.laneLines)
+print(angle)
