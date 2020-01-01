@@ -137,6 +137,27 @@ int main(int argc, char **argv){
 			float throttle;
 
 			while(x3trans != xd && z3trans != zd){
+				try{
+					transformStamped3 = tfBuffer3.lookupTransform("tag_3", "cv_camera", ros::Time(0));
+					tag3Ready = 1;
+				}
+				catch(tf2::TransformException &ex){
+					ROS_INFO_STREAM("tag_3 not ready");
+					ros::Duration(1.0).sleep();
+					tag3Ready = 0;
+					continue;
+				}
+
+				x3trans = (float)(transformStamped3.transform.translation.x)*(float)1000;
+				y3trans = (float)(transformStamped3.transform.translation.y)*(float)1000;
+				z3trans = (float)(transformStamped3.transform.translation.z)*(float)1000;
+				tfSecs3 = transformStamped3.header.stamp.sec;
+
+				ROS_INFO_STREAM("xTrans:" << x3trans);
+				ROS_INFO_STREAM("yTrans:" << y3trans);
+				ROS_INFO_STREAM("zTrans:" << z3trans);
+				ROS_INFO_STREAM("--------------");
+
 				steering = -1*(xd - x3trans);
 				throttle = -1*(zd - z3trans);
 
