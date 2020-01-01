@@ -119,7 +119,7 @@ int main(int argc, char **argv){
 		ROS_INFO_STREAM("xTrans:" << x3trans);
 		ROS_INFO_STREAM("yTrans:" << y3trans);
 		ROS_INFO_STREAM("zTrans:" << z3trans);
-
+		ROS_INFO_STREAM("--------------");
 		// Create the single Servo Control Message that will be published
 		parallel_park::ServoCtrlMsg control;
 
@@ -136,12 +136,13 @@ int main(int argc, char **argv){
 			float steering;
 			float throttle;
 
-			while(xtrans != xd && z3trans != zd){
+			while(x3trans != xd && z3trans != zd){
 				steering = -1*(xd - x3trans);
 				throttle = -1*(zd - z3trans);
 
 				ROS_INFO_STREAM("Steering: " << steering);
 				ROS_INFO_STREAM("Throttle: " << throttle);
+				ROS_INFO_STREAM("--------------");
 			}
 
 			// if(tag3Ready){
