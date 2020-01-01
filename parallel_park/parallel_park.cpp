@@ -164,6 +164,7 @@ int main(int argc, char **argv){
 				ROS_INFO_STREAM("Steering: " << steering);
 				ROS_INFO_STREAM("Throttle: " << throttle);
 				ROS_INFO_STREAM("--------------");
+				ros::Duration(1.0).sleep();
 			}
 
 			// if(tag3Ready){
