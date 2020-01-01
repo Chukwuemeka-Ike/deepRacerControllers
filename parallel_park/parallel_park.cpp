@@ -133,6 +133,8 @@ int main(int argc, char **argv){
 			// control.throttle = (float) (0.65);
 			// pub.publish(control);
 			ros::Duration(2.0).sleep();
+			float steering;
+			float throttle;
 
 			while(xtrans != xd && z3trans != zd){
 				steering = -1*(xd - x3trans);
