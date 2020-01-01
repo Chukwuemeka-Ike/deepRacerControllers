@@ -70,6 +70,8 @@ int main(int argc, char **argv){
 	// Set the sleep rate to 2s
 	ros::Rate rate(2.0);
 	long prevSecs3 = 0; // This is how I make sure it's a new transform each time
+	float xd = 34;
+	float zd = 130;
 
 	// Perform the following as long as the node is running
 	while(ros::ok()){
@@ -131,7 +133,15 @@ int main(int argc, char **argv){
 			// control.throttle = (float) (0.65);
 			// pub.publish(control);
 			ros::Duration(2.0).sleep();
-			
+
+			while(xtrans != xd && z3trans != zd){
+				steering = -1*(xd - x3trans);
+				throttle = -1*(zd - z3trans);
+
+				ROS_INFO_STREAM("Steering: " << steering);
+				ROS_INFO_STREAM("Throttle: " << throttle);
+			}
+
 			// if(tag3Ready){
 			// 	ROS_INFO_STREAM(x3trans);
 			// 	ROS_INFO_STREAM(y3trans);
