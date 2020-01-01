@@ -100,7 +100,7 @@ int main(int argc, char **argv){
 			tag3Ready = 0;
 			continue;
 		}
-		ROS_INFO_STREAM("tag3Ready:" << tag3Ready);
+		// ROS_INFO_STREAM("tag3Ready:" << tag3Ready);
 
 		// Holders for each of the tags' frame translations
 		// float x1trans= (transformStamped1.transform.translation.x)*1000;
@@ -115,7 +115,7 @@ int main(int argc, char **argv){
 		long tfSecs3 = transformStamped3.header.stamp.sec;
 
 		ROS_INFO_STREAM("xTrans:" << x3trans);
-		// ROS_INFO_STREAM("yTrans:" << y3trans << "size: " << sizeof(y3trans));
+		ROS_INFO_STREAM("yTrans:" << y3trans);
 		ROS_INFO_STREAM("zTrans:" << z3trans);
 
 		// Create the single Servo Control Message that will be published
@@ -131,12 +131,12 @@ int main(int argc, char **argv){
 			// control.throttle = (float) (0.65);
 			// pub.publish(control);
 			ros::Duration(2.0).sleep();
-
-			if(tag3Ready){
-				ROS_INFO_STREAM(x3trans);
-				ROS_INFO_STREAM(y3trans);
-				ROS_INFO_STREAM(z3trans);
-			}
+			
+			// if(tag3Ready){
+			// 	ROS_INFO_STREAM(x3trans);
+			// 	ROS_INFO_STREAM(y3trans);
+			// 	ROS_INFO_STREAM(z3trans);
+			// }
 			// // Find out if tag 3 ready
 			// if(tag3Ready){
 			// 	// Test if tag 3 is within an acceptable range indicating we can park
