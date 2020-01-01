@@ -70,7 +70,7 @@ int main(int argc, char **argv){
 	// Set the sleep rate to 2s
 	ros::Rate rate(2.0);
 	long prevSecs3 = 0; // This is how I make sure it's a new transform each time
-	float xd = 34;
+	float xd = 32;
 	float zd = 130;
 
 	// Perform the following as long as the node is running
@@ -136,7 +136,7 @@ int main(int argc, char **argv){
 			float steering;
 			float throttle;
 
-			while(x3trans != xd && z3trans != zd){
+			while(x3trans < xd && z3trans < zd){
 				try{
 					transformStamped3 = tfBuffer3.lookupTransform("tag_3", "cv_camera", ros::Time(0));
 					tag3Ready = 1;
