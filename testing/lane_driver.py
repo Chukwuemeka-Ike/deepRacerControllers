@@ -53,6 +53,8 @@ def computeSteeringAngle(laneLines):
     elif angle < -0.9:
         angle = -0.9
 
+    cv2.imshow('Heading Line' , headingImg)
+    cv2.waitKey(1000)
     return angle
 
 

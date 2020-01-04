@@ -33,9 +33,9 @@ class laneFinder:
     # Find the edges of the regions that correspond to the lane color
     def findEdges(self):
         hsv = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)
-        lowerYellow = np.array([90, 15, 100])
-        upperYellow = np.array([140, 255, 255])
-        mask = cv2.inRange(hsv, lowerYellow, upperYellow)
+        lowerBlue = np.array([60, 60, 60])
+        upperBlue = np.array([150, 180, 90])
+        mask = cv2.inRange(hsv, lowerBlue, upperBlue)
         self.edges = cv2.Canny(mask, 200, 400)
         return self.edges
 

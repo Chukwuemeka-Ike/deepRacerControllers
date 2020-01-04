@@ -12,7 +12,7 @@ import numpy as np
 # DeepRacer
 class laneFinder:
     def __init__(self):
-        self.image = cv2.imread('laneLeft4Curve.jpg')
+        self.image = cv2.imread('./blueTape/lane2.jpg')
         self.edges = []
         # image = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
         # self.bridge = cv_bridge.CvBridge()
@@ -22,11 +22,10 @@ class laneFinder:
     # Find the edges of the regions that correspond to the lane color
     def findEdges(self):
         hsv = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)
-        lowerYellow = np.array([100, 15, 200])
-        upperYellow = np.array([150, 255, 255])
-        mask = cv2.inRange(hsv, lowerYellow, upperYellow)
+        lowerBlue = np.array([60, 60, 60])
+        upperBlue = np.array([150, 180, 90])
+        mask = cv2.inRange(hsv, lowerBlue, upperBlue)
         self.edges = cv2.Canny(mask, 200, 400)
-        cv2.imshow('edges' , self.edges)
         return self.edges
 
     # This function helps the DeepRacer focus on the lower half of the image,
@@ -44,6 +43,7 @@ class laneFinder:
         ]], np.int32)
         cv2.fillPoly(mask, polygon, 255)
         self.croppedEdges = cv2.bitwise_and(self.edges, mask)
+
         return self.croppedEdges
 
     # This function uses the Hough Line Transform in detecting line segments
@@ -54,6 +54,7 @@ class laneFinder:
         minThreshold = 20 # minimum length to be detected as a line
         self.lineSegments = cv2.HoughLinesP(self.croppedEdges, rho, angle, minThreshold,
                                 np.array([]), minLineLength=15, maxLineGap=6)
+
         return self.lineSegments
 
     # helper
@@ -120,13 +121,14 @@ def detectLane(finder):
     laneLines = finder.avgSlopeIntercept()
     return laneLines
 
-def displayLines(finder, lines, lineColor=(255, 155, 0), lineWidth=4):
+def displayLines(finder, lines, lineColor=(0, 255, 100), lineWidth=4):
     lineImage = np.zeros_like(finder.image)
     if lines is not None:
         for line in lines:
             for x1, y1, x2, y2 in line:
                 cv2.line(lineImage, (x1, y1), (x2, y2), lineColor, lineWidth)
     lineImage = cv2.addWeighted(finder.image, 0.8, lineImage, 1, 1)
+
     return lineImage
 
 
