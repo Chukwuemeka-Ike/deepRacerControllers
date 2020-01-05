@@ -12,7 +12,7 @@ import numpy as np
 # DeepRacer
 class laneFinder:
     def __init__(self):
-        self.image = cv2.imread('./blueTape/lane2.jpg')
+        self.image = cv2.imread('./blueTape/lane7.jpg')
         self.edges = []
         # image = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
         # self.bridge = cv_bridge.CvBridge()
@@ -49,11 +49,11 @@ class laneFinder:
     # This function uses the Hough Line Transform in detecting line segments
     # from the computed edges from the above function.
     def detectLineSegments(self):
-        rho = 0.2 # distance precision in pixels
-        angle = np.pi/180 # angular precision in radians (1 degree)
-        minThreshold = 20 # minimum length to be detected as a line
+        rho = 4 # distance precision in pixels
+        angle = 5*np.pi/180 # angular precision in radians (1 degree)
+        minThreshold = 25 # minimum length to be detected as a line
         self.lineSegments = cv2.HoughLinesP(self.croppedEdges, rho, angle, minThreshold,
-                                np.array([]), minLineLength=15, maxLineGap=6)
+                                np.array([]), minLineLength=20, maxLineGap=15)
 
         return self.lineSegments
 
@@ -136,5 +136,5 @@ def displayLines(finder, lines, lineColor=(0, 255, 100), lineWidth=4):
 finder = laneFinder()
 laneLines = detectLane(finder)
 lineImage = displayLines(finder, laneLines)
-# cv2.imshow("Lane Lines", lineImage)
-# cv2.waitKey(1000)
+cv2.imshow("Lane Lines", lineImage)
+cv2.waitKey(1000)

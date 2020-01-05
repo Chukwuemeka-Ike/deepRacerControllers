@@ -96,11 +96,11 @@ while (capture.isOpened()):
 
 
     # avgSlopeIntercept
-    rho = 0.2 # distance precision in pixels
-    angle = np.pi/180 # angular precision in radians (1 degree)
-    minThreshold = 20 # minimum length to be detected as a line
+    rho = 4 # distance precision in pixels
+    angle = 5*np.pi/180 # angular precision in radians (1 degree)
+    minThreshold = 25 # minimum length to be detected as a line
     lineSegments = cv2.HoughLinesP(croppedEdges, rho, angle, minThreshold,
-                            np.array([]), minLineLength=15, maxLineGap=6)
+                            np.array([]), minLineLength=20, maxLineGap=10)
     # print(lineSegments)
     laneLines = []
 

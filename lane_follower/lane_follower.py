@@ -8,11 +8,14 @@ import numpy as np
 from sensor_msgs.msg import Image
 from _ServoCtrlMsg import ServoCtrlMsg # ctrl_pkg.msg
 import cv2, cv_bridge
-# import lane_driver as lDriver
 import lane_finder as lFinder
 
-# Create an overarching laneFollower class which encompasses the finder and
-# driver classes from the other two scripts, and
+# Set the forward throttle value to be 0.5 which is about 0.318 m/s
+forwardThrottle = 0.5
+
+# Create a laneFollower class which encompasses the finder
+# functionalities and uses them in sending ServoCtrlMsg messages to drive
+# the DeepRacer
 class laneFollower:
     #
     def __init__(self):
@@ -22,7 +25,7 @@ class laneFollower:
         self.driveCommand = rospy.Publisher('manual_drive', ServoCtrlMsg,
                                                         queue_size=30)
         self.servoCtrlMsg = ServoCtrlMsg()
-        #
+
     #
     def image_callback(self, msg):
         self.image = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
@@ -38,7 +41,7 @@ class laneFollower:
             self.stopDriving()
 
     def steerDeepRacer(self, angle):
-        self.servoCtrlMsg.throttle = 0.6
+        self.servoCtrlMsg.throttle = forwardThrottle
         self.servoCtrlMsg.angle = angle
         self.driveCommand.publish(self.servoCtrlMsg)
 
