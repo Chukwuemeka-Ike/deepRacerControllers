@@ -2,7 +2,9 @@
 
 The packages in this repo are controllers for the AWS DeepRacer which command different behaviors for the robot including parallel parking and lane following using ROS nodes.
 
-Using the controllers:
+A significantly more detailed tutorial and documentation for these controllers is available at the following link:
+https://www.hackster.io/chukwuemeka-ike/aws-deepracer-to-autonomous-rover-a259d9
+
 
 
 Canny Edge Detection:
