@@ -48,15 +48,15 @@ In this section, I'll go over the algorithm developed to parallel park the robot
 3. From position 2, it can then estimate its position relative to tag 3, and if it's within a specified region, it continues to actually park itself. Again, this portion is open loop, since we cannot sense its proximity to either of the boxes while it's parking.
 
 <div align="center" >
-<img src="../parkingSetup.jpg" width="425" alt="Parking Setup"/>
+<img src="readme_images/parkingSetup.jpg" width="425" alt="Parking Setup"/>
 
 Parking Setup
 
-<img src="../position1.jpg" width="425" alt="DeepRacer at Position 1"/>
+<img src="readme_images/position1.jpg" width="425" alt="DeepRacer at Position 1"/>
 
 DeepRacer at Position 1
 
-<img src="../position2.jpg" width="425" alt="DeepRacer at Position 2"/>
+<img src="readme_images/position2.jpg" width="425" alt="DeepRacer at Position 2"/>
 
 DeepRacer at Position 2
 </div>
